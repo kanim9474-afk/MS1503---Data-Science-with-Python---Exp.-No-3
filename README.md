@@ -54,8 +54,96 @@ To create a sample retail dataset, identify and handle missing values (`NaN`/`No
 
 
 ## Output
+import nbformat as nbf 
+import subprocess 
+import sys 
 
+nb = nbf.v4.new_notebook() 
 
-## Result
-The program successfully creates a retail dataset, identifies missing entries and duplicate rows, imputes missing values using mean and mode strategies, removes duplicates, and outputs a clean dataset ready for downstream analysis.
+cells = [ 
+    nbf.v4.new_markdown_cell("""# Customer Data Exploration Using Pandas   
+
+## Aim  
+To create a sample customer dataset and perform data exploration and basic analytics using Pandas functions.  
+
+## Algorithm  
+1. Import the Pandas library.  
+2. Create a customer dataset using a Python dictionary.  
+3. Convert the dictionary into a Pandas DataFrame.  
+4. Display the dataset, its shape, columns, and data types.  
+5. Perform exploratory functions: `head()`, `tail()`, `info()`, `describe()`.  
+6. Use filtering, sorting, and grouping operations to analyze customer insights.  
+7. Find statistics such as average income, highest spending score, and region-wise averages."""),  
+    
+    nbf.v4.new_code_cell("""# Customer Data Exploration using Pandas (Default Values)  
+import pandas as pd  
+
+# Step 1: Create a sample customer dataset  
+data = {  
+    "Customer_ID": [101, 102, 103, 104, 105, 106, 107, 108],  
+    "Customer_Name": ["Anita", "Rajesh", "Priya", "Vikram", "Divya", "Manoj", "Sita", "Amit"],  
+    "Region": ["North", "South", "East", "West", "North", "South", "East", "West"],  
+    "Age": [25, 32, 41, 29, 35, 45, 28, 40],  
+    "Annual_Income": [55000, 72000, 61000, 48000, 85000, 90000, 64000, 58000],  
+    "Spending_Score": [78, 62, 45, 88, 92, 55, 70, 60],  
+    "Loyalty_Years": [2, 5, 4, 3, 6, 7, 3, 4]  
+}
+
+# Step 2: Convert to a Pandas DataFrame  
+df = pd.DataFrame(data)  
+print("---- CUSTOMER DATASET ----")  
+print(df)"""),  
+
+    nbf.v4.new_code_cell("""# Step 3: Basic exploration
+print("Shape of Dataset:", df.shape)  
+print("Columns:", df.columns.tolist())  
+
+print("\\n---- Dataset Info ----")  
+print(df.info())  
+
+print("\\n---- Summary Statistics ----")  
+print(df.describe())"""),  
+
+    nbf.v4.new_code_cell("""# Step 4: Display first and last few records
+print("First 3 Records:\\n", df.head(3))  
+print("\\nLast 3 Records:\\n", df.tail(3))"""),  
+
+    nbf.v4.new_code_cell("""# Step 5: Sort customers by Annual Income (descending)
+print("Customers Sorted by Annual Income:\\n", df.sort_values(by="Annual_Income", ascending=False))"""),  
+
+    nbf.v4.new_code_cell("""# Step 6: Filter high-income customers (Income > 70000)
+print("High Income Customers (Income > 70000):\\n", df[df["Annual_Income"] > 70000][["Customer_Name", "Annual_Income"]])"""),  
+
+    nbf.v4.new_code_cell("""# Step 7: Group customers by Region and find average Income and Spending Score
+print("Region-wise Average Income and Spending Score:")  
+print(df.groupby("Region")[["Annual_Income", "Spending_Score"]].mean())  
+
+# Step 8: Count number of customers in each Region  
+print("\\nCustomer Count per Region:")  
+print(df["Region"].value_counts())"""),  
+
+    nbf.v4.new_code_cell("""# Step 9: Identify customer with maximum Spending Score
+max_spender = df.loc[df["Spending_Score"].idxmax()]  
+print("Top Spender Details:\\n", max_spender)  
+
+# Step 10: Compute overall averages    
+print("\\nAverage Annual Income:", df["Annual_Income"].mean())  
+print("Average Spending Score:", df["Spending_Score"].mean())"""),  
+
+    nbf.v4.new_markdown_cell("""## Result
+The program successfully created a customer dataset using Pandas and performed data exploration and basic analytics.""")  
+]
+
+nb['cells'] = cells  
+
+filename = "customer_data_exploration_pandas.ipynb"  
+with open(filename, 'w', encoding='utf-8') as f:  
+    nbf.write(nb, f)   
+
+# Execute the notebook using jupyter nbconvert so outputs are pre-populated  
+subprocess.run([sys.executable, "-m", "jupyter", "nbconvert", "--to", "notebook", "--execute", "--inplace", filename], check=True)  
+print("Successfully generated and executed:", filename)  
+
+## Result  
+The program successfully creates a retail dataset, identifies missing entries and duplicate rows, imputes missing values using mean and mode strategies, removes   duplicates, and outputs a clean dataset ready for downstream analysis.  
 
